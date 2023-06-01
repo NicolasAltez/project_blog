@@ -50,6 +50,7 @@ gem 'devise'
 gem 'rails_admin'
 
 # Use Sass to process CSS
+gem 'bootstrap'
 gem "sassc-rails"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
