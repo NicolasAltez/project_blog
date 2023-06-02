@@ -7,4 +7,12 @@ class Post < ApplicationRecord
     after_create_commit { broadcast_prepend_to 'posts' }
     after_update_commit { broadcast_replace_to 'posts' }
     after_destroy_commit { broadcast_remove_to 'posts' }
+
+    before_destroy :purge_image
+
+    private
+
+    def purge_image
+        image.purge if image.attached?
+    end
 end
