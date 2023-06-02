@@ -1,0 +1,10 @@
+<% comments.each do |comment| %>
+  <div class="comment">
+    <p><strong>Author:</strong> <%= comment.user.email %></p>
+    <p><strong>Content:</strong> <%= comment.content %></p>
+    <%= link_to 'Edit', edit_post_comment_path(post_id: @post.id, id: comment.id) %>
+    <%= form_with(model: comment, url: post_comment_path(@post, comment), method: :delete, data: { confirm: 'Are you sure?' }) do |form| %>
+      <%= form.submit 'Delete' %>
+    <% end %>
+  </div>
+<% end %>

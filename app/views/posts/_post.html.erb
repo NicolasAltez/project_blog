@@ -7,12 +7,13 @@
       <%= form_with(model: post, url: post_path(post), method: :delete, data: { confirm: 'Are you sure?' }) do |form| %>
         <%= form.submit 'Delete', data: { turbo_frame: 'posts_list' } %>
       <% end %>
+      <%= link_to 'Show', post_path(post) %>
     </td>
   </tr>
   <tr>
     <td colspan="3">
       <% if post.image.attached? %>
-        <%= image_tag post.image.variant(resize: '200x200') %>
+        <%= image_tag post.image, size: '200x200' %>
       <% else %>
         No image available.
       <% end %>
