@@ -1,0 +1,28 @@
+<h1>Posts</h1>
+
+<turbo-frame id="posts_list">
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @posts.any? %>
+        <%= render @posts %>
+      <% else %>
+        <tr>
+          <td colspan="3">No posts available.</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</turbo-frame>
+
+<% if @posts.any? %>
+  <%= link_to 'New Post', new_post_path, remote: true, data: { turbo_frame: 'new_post_frame' } %>
+<% else %>
+  <p>Create your first post <%= link_to 'here', new_post_path, remote: true, data: { turbo_frame: 'new_post_frame' } %>.</p>
+<% end %>
