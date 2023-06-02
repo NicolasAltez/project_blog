@@ -1,15 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe CommentsController, type: :controller do
-
-
   include Devise::Test::ControllerHelpers
 
   let(:user) { create(:user) }
-  let(:post) { create(:post, user: user) }
+  let(:new_post) { create(:post, user: user) }
   let(:valid_attributes) { attributes_for(:comment) }
   let(:invalid_attributes) { { content: '' } }
-  let!(:comment) { create(:comment, post: post, user: user) }
+  let!(:comment) { create(:comment, post: new_post, user: user) }
 
   before { sign_in user }
 
@@ -17,33 +15,33 @@ RSpec.describe CommentsController, type: :controller do
     context "with valid parameters" do
       it "creates a new comment" do
         expect {
-          post :create, params: { post_id: post.id, comment: valid_attributes }
+          post :create, params: { post_id: new_post.id, comment: valid_attributes }
         }.to change(Comment, :count).by(1)
       end
 
       it "redirects to the post" do
-        post :create, params: { post_id: post.id, comment: valid_attributes }
-        expect(response).to redirect_to(post_path(post))
+        post :create, params: { post_id: new_post.id, comment: valid_attributes }
+        expect(response).to redirect_to(post_path(new_post))
       end
     end
 
     context "with invalid parameters" do
       it "does not create a new comment" do
         expect {
-          post :create, params: { post_id: post.id, comment: invalid_attributes }
+          post :create, params: { post_id: new_post.id, comment: invalid_attributes }
         }.not_to change(Comment, :count)
       end
 
       it "redirects to the post" do
-        post :create, params: { post_id: post.id, comment: invalid_attributes }
-        expect(response).to redirect_to(post_path(post))
+        post :create, params: { post_id: new_post.id, comment: invalid_attributes }
+        expect(response).to redirect_to(post_path(new_post))
       end
     end
   end
 
   describe "GET #edit" do
     it "assigns the requested comment to @comment" do
-      get :edit, params: { post_id: post.id, id: comment.id }
+      get :edit, params: { post_id: new_post.id, id: comment.id }
       expect(assigns(:comment)).to eq(comment)
     end
   end
@@ -51,26 +49,26 @@ RSpec.describe CommentsController, type: :controller do
   describe "PATCH #update" do
     context "with valid parameters" do
       it "updates the comment" do
-        patch :update, params: { post_id: post.id, id: comment.id, comment: valid_attributes }
+        patch :update, params: { post_id: new_post.id, id: comment.id, comment: { content: "actualizado"} }
         comment.reload
-        expect(comment.content).to eq(valid_attributes[:content])
+        expect(comment.content).to eq("actualizado")
       end
 
       it "redirects to the post" do
-        patch :update, params: { post_id: post.id, id: comment.id, comment: valid_attributes }
-        expect(response).to redirect_to(post_path(post))
+        patch :update, params: { post_id: new_post.id, id: comment.id, comment:{ content: "actualizado"} }
+        expect(response).to redirect_to(post_path(new_post))
       end
     end
 
     context "with invalid parameters" do
       it "does not update the comment" do
-        patch :update, params: { post_id: post.id, id: comment.id, comment: invalid_attributes }
+        patch :update, params: { post_id: new_post.id, id: comment.id, comment: invalid_attributes }
         comment.reload
         expect(comment.content).not_to eq(invalid_attributes[:content])
       end
 
       it "renders the edit template" do
-        patch :update, params: { post_id: post.id, id: comment.id, comment: invalid_attributes }
+        patch :update, params: { post_id: new_post.id, id: comment.id, comment: invalid_attributes }
         expect(response).to render_template(:edit)
       end
     end
@@ -79,13 +77,13 @@ RSpec.describe CommentsController, type: :controller do
   describe "DELETE #destroy" do
     it "destroys the comment" do
       expect {
-        delete :destroy, params: { post_id: post.id, id: comment.id }
+        delete :destroy, params: { post_id: new_post.id, id: comment.id }
       }.to change(Comment, :count).by(-1)
     end
 
     it "redirects to the post" do
-      delete :destroy, params: { post_id: post.id, id: comment.id }
-      expect(response).to redirect_to(post_path(post))
+      delete :destroy, params: { post_id: new_post.id, id: comment.id }
+      expect(response).to redirect_to(post_path(new_post))
     end
   end
 end

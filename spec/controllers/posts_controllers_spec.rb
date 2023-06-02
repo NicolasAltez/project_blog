@@ -4,7 +4,7 @@ RSpec.describe PostsController, type: :controller do
   include Devise::Test::ControllerHelpers
 
   let(:user) { create(:user) }
-  let(:post) { create(:post, user: user) }
+  let(:new_post) { create(:post, user: user) }
   let(:valid_attributes) { attributes_for(:post) }
   let(:invalid_attributes) { { title: '', content: '' } }
 
@@ -26,18 +26,18 @@ RSpec.describe PostsController, type: :controller do
 
   describe 'GET show' do
     it 'returns a successful response' do
-      get :show, params: { id: post.id }
+      get :show, params: { id: new_post.id }
       expect(response).to be_successful
     end
   
     it 'assigns @comment as a new Comment' do
-      get :show, params: { id: post.id }
+      get :show, params: { id: new_post.id }
       expect(assigns(:comment)).to be_a_new(Comment)
     end
   
     it 'assigns @post with the correct post' do
-      get :show, params: { id: post.id }
-      expect(assigns(:post)).to eq(post)
+      get :show, params: { id: new_post.id }
+      expect(assigns(:post)).to eq(new_post)
     end
   end
 
@@ -83,39 +83,39 @@ RSpec.describe PostsController, type: :controller do
 
   describe 'GET edit' do
     it 'returns a successful response' do
-      get :edit, params: { id: post.id }
+      get :edit, params: { id: new_post.id }
       expect(response).to be_successful
     end
 
     it 'assigns @post with the correct post' do
-      get :edit, params: { id: post.id }
-      expect(assigns(:post)).to eq(post)
+      get :edit, params: { id: new_post.id }
+      expect(assigns(:post)).to eq(new_post)
     end
   end
 
   describe 'PATCH update' do
     context 'with valid parameters' do
       it 'updates the post' do
-        patch :update, params: { id: post.id, post: { title: 'Titulo actualizado' } }
-        post.reload
-        expect(post.title).to eq('Titulo actualizado')
+        patch :update, params: { id: new_post.id, post: { title: 'Titulo actualizado' } }
+        new_post.reload
+        expect(new_post.title).to eq('Titulo actualizado')
       end
 
       it 'redirects to the posts index' do
-        patch :update, params: { id: post.id, post: { title: valid_attributes } }
+        patch :update, params: { id: new_post.id, post: { title: 'Titulo actualizado' } }
         expect(response).to redirect_to(posts_path)
       end
     end
 
     context 'with invalid parameters' do
       it 'does not update the post' do
-        patch :update, params: { id: post.id, post: { title: invalid_attributes } }
-        post.reload
-        expect(post.title).not_to eq('')
+        patch :update, params: { id: new_post.id, post: invalid_attributes }
+        new_post.reload
+        expect(new_post.title).not_to eq('')
       end
 
       it 'renders the edit template' do
-        patch :update, params: { id: post.id, post: { title: invalid_attributes } }
+        patch :update, params: { id: new_post.id, post: invalid_attributes }
         expect(response).to render_template(:edit)
       end
     end
@@ -123,14 +123,17 @@ RSpec.describe PostsController, type: :controller do
 
   describe 'DELETE destroy' do
     it 'destroys the post' do
+      new_post
       expect {
-        delete :destroy, params: { id: post.id }
+        delete :destroy, params: { id: new_post.id }
       }.to change(Post, :count).by(-1)
     end
-
+  
     it 'redirects to the posts index' do
-      delete :destroy, params: { id: post.id }
+      new_post 
+      delete :destroy, params: { id: new_post.id }
       expect(response).to redirect_to(posts_path)
     end
   end
+  
 end
