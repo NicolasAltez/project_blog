@@ -49,6 +49,8 @@ gem 'devise'
 
 gem 'rails_admin'
 
+gem 'hotwire-rails'
+
 # Use Sass to process CSS
 gem 'bootstrap'
 gem "sassc-rails"
