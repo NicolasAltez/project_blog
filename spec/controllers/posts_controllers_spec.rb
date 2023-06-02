@@ -23,6 +23,24 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
+  describe 'GET show' do
+    it 'returns a successful response' do
+      get :show, params: { id: post.id }
+      expect(response).to be_successful
+    end
+  
+    it 'assigns @comment as a new Comment' do
+      get :show, params: { id: post.id }
+      expect(assigns(:comment)).to be_a_new(Comment)
+    end
+  
+    it 'assigns @post with the correct post' do
+      get :show, params: { id: post.id }
+      expect(assigns(:post)).to eq(post)
+    end
+  end
+  
+
   describe 'GET new' do
     it 'returns a successful response' do
       get :new
