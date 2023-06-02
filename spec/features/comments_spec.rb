@@ -6,7 +6,7 @@ RSpec.describe 'Comments', type: :feature do
   include Capybara::DSL
   include Devise::Test::IntegrationHelpers
 
-  let(:user) { User.create(email: 'test@example.com', password: 'password') }
+  let(:user) { User.create(email: 'nico@gmail.com', password: 'password') }
   let!(:post) { Post.create(title: 'titulo', content: 'contenido', user: user) }
 
   before do
@@ -24,11 +24,11 @@ RSpec.describe 'Comments', type: :feature do
         expect(page).to have_content(post.content)
         expect(page).to have_content('New Comment')
 
-        fill_in 'Content', with: 'This is a new comment.'
+        fill_in 'Content', with: 'nuevo comentario'
 
         click_button 'Add Comment'
 
-        expect(page).to have_content('This is a new comment.')
+        expect(page).to have_content('nuevo comentario')
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe 'Comments', type: :feature do
   end
 
   describe 'editing a comment' do
-    let!(:comment) { Comment.create(post: post, user: user, content: 'Old content') }
+    let!(:comment) { Comment.create(post: post, user: user, content: 'comentario viejo') }
 
     context 'with valid data' do
       it 'updates the comment' do
@@ -57,10 +57,10 @@ RSpec.describe 'Comments', type: :feature do
         click_link 'Show'
 
         click_link 'Edit'
-        fill_in 'Content', with: 'Updated content'
+        fill_in 'Content', with: 'comentario actualizado'
         click_button 'Update Comment'
 
-        expect(page).to have_content('Updated content')
+        expect(page).to have_content('comentario actualizado')
       end
     end
 
