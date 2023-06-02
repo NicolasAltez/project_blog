@@ -29,4 +29,40 @@ RSpec.describe Post, type: :model do
         allow_any_instance_of(Post).to receive(:broadcast_remove_to).with('posts')
         post.destroy
     end
+
+    it "purges the image if attached" do
+        post = Post.new
+        image = double("image")
+
+        allow(post).to receive(:image).and_return(image)
+        allow(image).to receive(:attached?).and_return(true)
+        allow(image).to receive(:purge)
+        allow(image).to receive(:nil?).and_return(true)
+  
+        post.send(:purge_image)
+  
+        expect(post.image).to be_nil
+    end
+  
+    it "does not purge the image if not attached" do
+        post = Post.new
+        image = double("image")
+
+        allow(post).to receive(:image).and_return(image)
+        allow(image).to receive(:attached?).and_return(false)
+
+        expect(image).not_to receive(:purge)
+  
+        post.send(:purge_image)
+
+        expect(post.image).not_to be_nil
+    end
+
+    it "triggers purge_image" do
+        post = Post.new
+
+        expect(post).to receive(:purge_image)
+
+        post.run_callbacks(:destroy)
+    end
 end
