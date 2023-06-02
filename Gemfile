@@ -51,6 +51,9 @@ gem 'rails_admin'
 
 gem 'hotwire-rails'
 
+gem 'cancancan'
+
+
 # Use Sass to process CSS
 gem 'bootstrap'
 gem "sassc-rails"
